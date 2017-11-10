@@ -1,65 +1,59 @@
 /*  BIRST UTILITY FUNCTIONS */
 
-// FUNCTION: escapeParam
-// Replace single quotes in a string
-function escapeParam(str) {
+var birstUtils = {
+  // FUNCTION: escapeParam
+  // Replace single quotes in a string
+  escapeParam : function (str){
     str = str.replace(/'/g, "\\'");
     return str;
-}
-
-// FUNCTION: indexOf
-// Lookup a particular object key in an array of objects
-var indexOf = function(key, array) {
+  },
+  // FUNCTION: indexOf
+  // Lookup a particular object key in an array of objects
+  indexOf : function (key, array){
     for (var i = 0; i < array.length; i++) {
         if (key === array[i].key) {
             return i; // returns index of matching object
         }
     }
     return -1; // no match found
-};
-
-// FUNCTION: textBetween
-// Returns the text from a string between the specified start and end characters
-var textBetween = function (textString, startChar, endChar){
-  var startPos = textString.indexOf(startChar) + 1;
-  var endPos = textString.indexOf(endChar,startPos);
-  return textString.substring(startPos,endPos);
-};
-
-// FUNCTION: getName
-// Returns the plain text name of either a measure, dimension, or saved expression
-var getName = function (nameString){
-
-  if (nameString.indexOf("Saved") >= 0){
-    // it's a saved expression
-    // get text between ' and '
-    return textBetween(nameString,"'","'");
-  }else{
-    // it's a dimension or measures
-    if (nameString.indexOf(":") >= 0){
-      // it's a measure
-      // check for second :
-      var firstPos = nameString.indexOf(":");
-      var secondPos = nameString.indexOf(":",firstPos + 1);
-      if (secondPos >= 0){
-        // second :
-        return textBetween(nameString.substr(firstPos + 1),":","]");
-      }
-      // get text between : and ]
-      return textBetween(nameString,":","]");
+  },
+  // FUNCTION: textBetween
+  // Returns the text from a string between the specified start and end characters
+  textBetween : function (textString, startChar, endChar){
+    var startPos = textString.indexOf(startChar) + 1;
+    var endPos = textString.indexOf(endChar,startPos);
+    return textString.substring(startPos,endPos);
+  },
+  // FUNCTION: getName
+  // Returns the plain text name of either a measure, dimension, or saved expression
+  getName : function (nameString){
+    if (nameString.indexOf("Saved") >= 0){
+      // it's a saved expression
+      // get text between ' and '
+      return textBetween(nameString,"'","'");
     }else{
-      // it's a dimension
-      // get text between . and ]
-      return textBetween(nameString,".","]");
+      // it's a dimension or measures
+      if (nameString.indexOf(":") >= 0){
+        // it's a measure
+        // check for second :
+        var firstPos = nameString.indexOf(":");
+        var secondPos = nameString.indexOf(":",firstPos + 1);
+        if (secondPos >= 0){
+          // second :
+          return textBetween(nameString.substr(firstPos + 1),":","]");
+        }
+        // get text between : and ]
+        return textBetween(nameString,":","]");
+      }else{
+        // it's a dimension
+        // get text between . and ]
+        return textBetween(nameString,".","]");
+      }
     }
-  }
-
-};
-
-// FUNCTION: prepareFilters
-// Validates and prepares the filter state
-var prepareFilters = function(state, apply) {
-
+  },
+  // FUNCTION: prepareFilters
+  // Validates and prepares the filter state
+  prepareFilters : function(state, apply) {
     if (apply == null) {
         console.debug("apply is null. All filters valid.");
         return state;
@@ -130,13 +124,10 @@ var prepareFilters = function(state, apply) {
             console.debug("apply was misconfigured, leaving filter state as is");
             return state;
     }
-
-};
-
-// FUNCTION: addDefaultFilters
-// Adds default filters to the filter state
-var addDefaultFilters = function(state, defaults) {
-
+  },
+  // FUNCTION: addDefaultFilters
+  // Adds default filters to the filter state
+  addDefaultFilters : function(state, defaults) {
     for (var d = 0; d < defaults.length; d++) {
 
         var filt = defaults[d];
@@ -151,12 +142,10 @@ var addDefaultFilters = function(state, defaults) {
         }
     }
     return state;
-};
-
-// FUNCTION: createWhere
-// Creates WHERE clause based on filter state
-var createWhere = function(state) {
-
+  },
+  // FUNCTION: createWhere
+  // Creates WHERE clause based on filter state
+  createWhere : function (state) {
     var clause = "";
 
     // Check to see if there are current filters
@@ -208,11 +197,10 @@ var createWhere = function(state) {
 
     // Return the finalized WHERE clause
     return clause;
-};
-
-// FUNCTION: runQuery
-// Sets filters, creates and runs the query
-var runQuery = function() {
+  },
+  // FUNCTION: runQuery
+  // Sets filters, creates and runs the query
+  runQuery : function() {
     console.log("runQuery");
 
     // Test for applyFilters definition
@@ -240,5 +228,5 @@ var runQuery = function() {
 
     // Execute the query
     BirstConfig.getData(query);
-
+  }
 };
