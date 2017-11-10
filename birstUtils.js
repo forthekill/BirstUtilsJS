@@ -30,7 +30,7 @@ var birstUtils = {
     if (nameString.indexOf("Saved") >= 0){
       // it's a saved expression
       // get text between ' and '
-      return textBetween(nameString,"'","'");
+      return this.textBetween(nameString,"'","'");
     }else{
       // it's a dimension or measures
       if (nameString.indexOf(":") >= 0){
@@ -40,14 +40,14 @@ var birstUtils = {
         var secondPos = nameString.indexOf(":",firstPos + 1);
         if (secondPos >= 0){
           // second :
-          return textBetween(nameString.substr(firstPos + 1),":","]");
+          return this.textBetween(nameString.substr(firstPos + 1),":","]");
         }
         // get text between : and ]
-        return textBetween(nameString,":","]");
+        return this.textBetween(nameString,":","]");
       }else{
         // it's a dimension
         // get text between . and ]
-        return textBetween(nameString,".","]");
+        return this.textBetween(nameString,".","]");
       }
     }
   },
@@ -65,7 +65,7 @@ var birstUtils = {
         return state;
     }
 
-    var idx = indexOf("filters", apply)
+    var idx = this.indexOf("filters", apply)
     if (idx >= 0) {
         var value = apply[idx].value;
         console.debug("value:" + value);
@@ -90,7 +90,7 @@ var birstUtils = {
                 console.debug(state[f]);
                 console.debug(state[f].key);
 
-                var test = indexOf(state[f].key, apply);
+                var test = this.indexOf(state[f].key, apply);
                 console.debug("test: " + test);
 
                 if (test < 0) {
@@ -108,7 +108,7 @@ var birstUtils = {
                 console.debug(state[f]);
                 console.debug(state[f].key);
 
-                var test = indexOf(state[f].key, apply);
+                var test = this.indexOf(state[f].key, apply);
 
                 if (test >= 0) {
                     // remove filter from state
@@ -174,10 +174,10 @@ var birstUtils = {
                 // For each filter value, set the key and the value
                 if (q === values.length - 1) {
                     // Single or final filter value
-                    clause += "[" + filter.key + "]" + filter.operator + "'" + escapeParam(values[q]) + "'";
+                    clause += "[" + filter.key + "]" + filter.operator + "'" + this.escapeParam(values[q]) + "'";
                 } else {
                     // OR for multiple filter values
-                    clause += "[" + filter.key + "]" + filter.operator + "'" + escapeParam(values[q]) + "' OR ";
+                    clause += "[" + filter.key + "]" + filter.operator + "'" + this.escapeParam(values[q]) + "' OR ";
                 }
 
             }
@@ -214,11 +214,11 @@ var birstUtils = {
     }
 
     // Prepare filter state for WHERE clause construction
-    var state = prepareFilters(filterState, applyFilters);
-    state = addDefaultFilters(state, defaultFilters);
+    var state = this.prepareFilters(filterState, applyFilters);
+    state = this.addDefaultFilters(state, defaultFilters);
 
     // Create WHERE clause
-    var clause = createWhere(state);
+    var clause = this.createWhere(state);
 
     // Append final query params
     var query = bql + clause + bqlSuffix;
